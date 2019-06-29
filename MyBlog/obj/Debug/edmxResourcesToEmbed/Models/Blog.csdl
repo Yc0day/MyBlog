@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MyBlogModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="MyBlogEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="admin" EntityType="MyBlogModel.admin" />
+    <EntitySet Name="article" EntityType="MyBlogModel.article" />
+    <EntitySet Name="cate" EntityType="MyBlogModel.cate" />
+    <EntitySet Name="link" EntityType="MyBlogModel.link" />
+    <AssociationSet Name="FK__article__creator__25869641" Association="MyBlogModel.FK__article__creator__25869641">
+      <End Role="admin" EntitySet="admin" />
+      <End Role="article" EntitySet="article" />
+    </AssociationSet>
+    <AssociationSet Name="FK__article__cateid__24927208" Association="MyBlogModel.FK__article__cateid__24927208">
+      <End Role="cate" EntitySet="cate" />
+      <End Role="article" EntitySet="article" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="admin">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="article" Relationship="MyBlogModel.FK__article__creator__25869641" FromRole="admin" ToRole="article" />
+  </EntityType>
+  <EntityType Name="article">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="title" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+    <Property Name="desc" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="content" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="cateid" Type="Int32" Nullable="false" />
+    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="creator" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="admin" Relationship="MyBlogModel.FK__article__creator__25869641" FromRole="article" ToRole="admin" />
+    <NavigationProperty Name="cate" Relationship="MyBlogModel.FK__article__cateid__24927208" FromRole="article" ToRole="cate" />
+  </EntityType>
+  <EntityType Name="cate">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="catname" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="article" Relationship="MyBlogModel.FK__article__cateid__24927208" FromRole="cate" ToRole="article" />
+  </EntityType>
+  <EntityType Name="link">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="url" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="desc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK__article__creator__25869641">
+    <End Type="MyBlogModel.admin" Role="admin" Multiplicity="1" />
+    <End Type="MyBlogModel.article" Role="article" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="admin">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="article">
+        <PropertyRef Name="creator" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__article__cateid__24927208">
+    <End Type="MyBlogModel.cate" Role="cate" Multiplicity="1" />
+    <End Type="MyBlogModel.article" Role="article" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="cate">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="article">
+        <PropertyRef Name="cateid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
